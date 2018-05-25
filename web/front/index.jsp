@@ -1,9 +1,9 @@
 <%@ page import="java.sql.ResultSet" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<jsp:useBean id="coon" scope="page" class="com.tools.ConnDB"/>
+<jsp:useBean id="conn" scope="page" class="com.tools.ConnDB"/>
 <%
-    ResultSet rs_new = coon.executeQuery(
+    ResultSet rs_new = conn.executeQuery(
 //            "select LIMIT 12 t1.ID,t1.goodname,t1.price,t2.typename "
 //                    + "from tb_goods t1,tb_subtype t2 where t1.typeid = t2.id and "
 //                    + "t1.newgoods=1 order by t1.intime desc"
@@ -14,6 +14,12 @@
     float new_nowprice=0;
     String new_picture="";
     String typename="";
+
+    ResultSet rs_hot=conn.executeQuery("select id,goodsname,nowprice,picture from tb_goods order by hit desc LIMIT 2");
+    int hot_ID=0;
+    String hot_goodsname="";
+    float hot_nowprice=0;
+    String hot_picture="";
 %>
 
 
@@ -91,14 +97,21 @@
                                 <div class="box_oc">
                                     <!-- 循环显示热门商品 ：添加两条商品信息-->
 
+                                    <%
+                                        while (rs_hot.next()){
+                                            hot_ID=rs_hot.getInt(1);
+                                            hot_goodsname=rs_hot.getString(2);
+                                            hot_nowprice=rs_hot.getFloat(3);
+                                            hot_picture=rs_hot.getString(4);
+                                    %>
                                     <div class="box-product product-grid">
                                         <div>
                                             <div class="image">
-                                                <a href="goodsDetail.jsp?ID=61"><img src="../images/goods/60.jpg"
+                                                <a href="goodsDetail.jsp?ID=<%=hot_ID%>"><img src="../images/goods/<%=hot_picture%>"
                                                                                      width="250px"></a>
                                                 </a>
                                             </div>
-                                            <div class="name"><a href="goodsDetail.jsp?ID=61">Sony/索尼 BDV-N9200WL</a>
+                                            <div class="name"><a href="goodsDetail.jsp?ID=61"><%=hot_goodsname%></a>
                                             </div>
                                             <!-- 星级评分条 -->
                                             <div class="rating">
@@ -121,13 +134,14 @@
                                             <!-- // 星级评分条 -->
                                             <!-- 商品价格 -->
                                             <div class="price">
-													<span class="price-new">价格：7038.0  元
+													<span class="price-new">价格:<%=hot_nowprice%> 元
 													</span>
                                             </div>
                                             <!-- // 商品价格 -->
                                         </div>
                                     </div>
 
+                                    <%}%>
                                     <!-- // 循环显示热门商品 ：添加两条商品信息-->
                                 </div>
                             </div>

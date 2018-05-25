@@ -7,6 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<script type="text/javascript">
+    window.location.href="front/index.jsp";
+</script>
   <head>
       <style>
           body{
